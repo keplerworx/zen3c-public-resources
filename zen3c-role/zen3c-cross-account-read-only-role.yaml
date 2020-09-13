@@ -7,11 +7,15 @@ Parameters:
     Type: String
     Default: "807410046616"
     Description: "Zen3C AWS account id (do not change this value)"
+  RoleName:
+    Type: String
+    Default: Zen3CCrossAccountReadOnlyRole
+    Description: "Name of the IAM role to be used by Zen3C. You may change this as per your organization's IAM naming policy"
 Resources:
   Zen3CCrossAccountReadOnlyRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: Zen3CCrossAccountReadOnlyRole
+      RoleName: !Ref RoleName
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -27,7 +31,7 @@ Resources:
 
 Outputs:
   Zen3CRole:
-    Description: Zen3C Cross account role
+    Description: Zen3C Cross-account role arn 
     Value: 
       "Fn::GetAtt":
         - Zen3CCrossAccountReadOnlyRole

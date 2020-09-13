@@ -1,0 +1,34 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This AWS CloudFormation stack creates access privileges that will allow
+  Zen3C to monitor your AWS account.
+Parameters:
+  Zen3CAccountID:
+    Type: String
+    Default: "807410046616"
+    Description: "Zen3C AWS account id (do not change this value)"
+Resources:
+  Zen3CCrossAccountReadOnlyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: Zen3CCrossAccountReadOnlyRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal: 
+              AWS:
+                - Fn::Sub: arn:aws:iam::${Zen3CAccountID}:root
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/SecurityAudit
+
+Outputs:
+  Zen3CRole:
+    Description: Zen3C Cross account role
+    Value: 
+      "Fn::GetAtt":
+        - Zen3CCrossAccountReadOnlyRole
+        - Arn
